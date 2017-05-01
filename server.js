@@ -3,6 +3,9 @@
 // - double click to toggle - front/back of cards
 // - press and hold to show cards, release to hide
 
+
+const port = process.env.PORT || 3000;
+
 // express npm: efficient async server handler
 const express = require('express');
 // handlebars from npm: partials and helpers
@@ -25,8 +28,8 @@ for(var i=0; i<52; i++) {
   cardArray[i] = i;
 }
 
-app.listen(3000, "0.0.0.0", () => {
-  console.log("Server is up on port 3000");
+app.listen(port, () => {
+  console.log(`Server is up on port ${port}`);
 });
 
 app.get('/', (req, res) => {
