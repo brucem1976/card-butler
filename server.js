@@ -2,7 +2,7 @@
 // - get cards fitting right
 // - double click to toggle - front/back of cards
 // - press and hold to show cards, release to hide
-
+// idea - display flop, turn, river, your best hand
 
 const port = process.env.PORT || 3000;
 
@@ -32,26 +32,78 @@ app.listen(port, () => {
   console.log(`Server is up on port ${port}`);
 });
 
+var state = 0;
+var card = [];
+var numCards = [2,5,6,7];
+
 app.get('/', (req, res) => {
-  cardArray = _.shuffle(cardArray);
-  var card = [];
+  var cards = numCards[state];
+  if(state === 0) {
+    cardArray = _.shuffle(cardArray);
+    card = [];
   
-  card.push({
-    value : cardValue[Math.floor(cardArray[0])%13],
-    suit : cardSuit[Math.floor(cardArray[0]/13)]
-  });
+    for(var i=0; i<7; i++) {
+      card.push({
+        value : cardValue[Math.floor(cardArray[i])%13],
+        suit : cardSuit[Math.floor(cardArray[i]/13)]
+      });
+    }
+  }
+  
+  switch(state) {
+    case 0:
+      console.log("Deal!");
+      break;
+    case 1:
+      console.log("Flop!");
+      break;
+    case 2:
+      console.log("Turn!");
+      break;
+    case 3:
+      console.log("River!");
+      break;
+  }
+  
+  state++;
+  if(state>3) {
+    state = 0;
+  }
+  
+  var passVals = [];
+  for(i=0; i<7; i++) {
+      passVals.push({value:"",suit:""});
+    }
+    
+  for(i=0; i<cards; i++) {
+      passVals[i].value = card[i].value;
+      passVals[i].suit = card[i].suit;
+    }
+    
+    console.log(JSON.stringify(card));
+    console.log(JSON.stringify(passVals));
+    
+  // card.push({
+    // value : cardValue[Math.floor(cardArray[1])%13],
+    // suit : cardSuit[Math.floor(cardArray[1]/13)]
+  // });
 
-  card.push({
-    value : cardValue[Math.floor(cardArray[1])%13],
-    suit : cardSuit[Math.floor(cardArray[1]/13)]
-  });
-
-  console.log(`${card[0].value} - ${card[1].suit}`);
+  //console.log(`${card[0].value} - ${card[1].suit}`);
 
   res.render('index.hbs', {
-    value1: card[0].value,
-    suit1: card[0].suit,
-    value2: card[1].value,
-    suit2: card[1].suit
+    value1: passVals[0].value,
+    suit1: passVals[0].suit,
+    value2: passVals[1].value,
+    suit2: passVals[1].suit,
+    value3: passVals[2].value,
+    suit3: passVals[2].suit,
+    value4: passVals[3].value,
+    suit4: passVals[3].suit,
+    value5: passVals[4].value,
+    suit5: passVals[4].suit,
+    value6: passVals[5].value,
+    suit6: passVals[5].suit,
+    value7:passVals[6].value,
+    suit7: passVals[6].suit
   });
 });
