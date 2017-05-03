@@ -1,16 +1,17 @@
+{{!--need to loop this puppy into existence--}}
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
 
 <div class="container-fluid">
   <div class="row">
-    {{getCardImage 0 "40%"}}
-    {{getCardImage 1 "40%"}}
+    {{getCardImage (getCardNumber i 0) "125px"}}
+    {{getCardImage (getCardNumber i 1) "125px"}}
   </div>
 
   <div class="row">
-    {{getCardImage 2 "16%"}}
-    {{getCardImage 3 "16%"}}
-    {{getCardImage 4 "16%"}}
-    {{getCardImage 5 "16%"}}
-    {{getCardImage 6 "16%"}}
+    {{getCardImage 20 "50px"}}
+    {{getCardImage 21 "50px"}}
+    {{getCardImage 22 "50px"}}
+    {{getCardImage 23 "50px"}}
+    {{getCardImage 24 "50px"}}
   </div>
 </div>

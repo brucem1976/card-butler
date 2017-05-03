@@ -14,9 +14,11 @@ const express = require('express');
 const hbs = require('hbs');
 // for shuffle
 const _ = require('lodash');
+const fs = require('fs');
 
 const cardValue = ['ace','2','3','4','5','6','7','8','9','10','jack','queen','king'];
 const cardSuit = ['clubs','diamonds','hearts','spades'];
+
 
 //create the server
 var app = express();
@@ -24,6 +26,8 @@ app.set('view engine', 'hbs');
 
 // allow all html's in /public to be loaded
 app.use(express.static(__dirname + '/public'));
+
+var users = JSON.parse(fs.readFileSync("./users.json","utf8"));
 
 // empty strings match to the graphic for the back of card
 var getCardSuit = (i) => {
@@ -37,6 +41,11 @@ var getCardValue = (i) => {
   return "";
 };
 
+hbs.registerHelper('getCardNumber', (i,j) => {
+  //console.log(`${i} =-=-= ${j}`);
+  return (i*2) + j;
+});
+
 hbs.registerHelper('getCardImage', (i,width) => {
   var str = "";
   str += '<img width="'
@@ -47,9 +56,9 @@ hbs.registerHelper('getCardImage', (i,width) => {
   str += '_of_';
   str += getCardSuit(i);
   str += '.svg" alt="card';
-  str += i;
+  str += i+1;
   str += '" />';
-  console.log(str);
+  //console.log(`cardimage for card: ${i}`);
   return new hbs.SafeString(str);
 });
 
@@ -64,37 +73,47 @@ app.listen(port, () => {
 });
 
 // state - 0=deal, 1=flop, 2=turn, 3=river
-var state = 0;
+var state = -1;
 // card object array - each has a value, and a suit
 var card = [];
-// cards visible to play in each state
-var numCards = [2,5,6,7];
+// cards visible to play in each state (for 10 players)
+var numCards = [20,23,24,25];
 // how many cards should currently be visible?
 var numVisibleCards = 0;
 
-app.get('/', (req, res) => {
-  numVisibleCards = numCards[state];
-  if(state === 0) {
-    cardArray = _.shuffle(cardArray);
-    card = [];
-  
-    for(var i=0; i<7; i++) {
-      card.push({
-        value : cardValue[Math.floor(cardArray[i])%13],
-        suit : cardSuit[Math.floor(cardArray[i]/13)]
-      });
+for(var i=0; i<users.length; i++) {
+  var route = `/${users[i].accessCode}`;
+  //app.get(route, (req, res, i) => rend(req,res,i));
+  app.get(route, makeHandler(i));
+}
+
+function makeHandler(i) {
+  return function(req, res) {
+     // copy body of handler function here
+    if(!i) state++;
+    if(state>3) {
+      state = 0;
     }
-  }
-  
-  state++;
-  
-  if(state>3) {
-    state = 0;
-  }
-  
-  console.log(JSON.stringify(card));
     
-  
-  res.render('index.hbs', {
-  });
-});
+    numVisibleCards = numCards[state];
+    if((state === 0)&&(!i)) {
+      cardArray = _.shuffle(cardArray);
+      card = [];
+    
+      for(var j=0; j<25; j++) {
+        card.push({
+          value : cardValue[Math.floor(cardArray[j])%13],
+          suit : cardSuit[Math.floor(cardArray[j]/13)]
+        });
+      }
+    }
+    
+    
+    
+    
+    
+    res.render('index.hbs', {
+      i
+    });
+  };
+}
