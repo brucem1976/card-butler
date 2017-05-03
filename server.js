@@ -2,7 +2,8 @@
 // - get cards fitting right
 // - double click to toggle - front/back of cards
 // - press and hold to show cards, release to hide
-// idea - display flop, turn, river, your best hand
+// idea - display flop, turn, river
+// idea - your best hand, on ranking
 
 const port = process.env.PORT || 3000;
 
