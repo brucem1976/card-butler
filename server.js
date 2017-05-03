@@ -1,4 +1,5 @@
 // TODO
+// figure out __dirname thing
 // - get cards fitting right
 // - double click to toggle - front/back of cards
 // - press and hold to show cards, release to hide
@@ -24,6 +25,35 @@ app.set('view engine', 'hbs');
 // allow all html's in /public to be loaded
 app.use(express.static(__dirname + '/public'));
 
+// empty strings match to the graphic for the back of card
+var getCardSuit = (i) => {
+  if(numVisibleCards > i) return card[i].suit;
+  return "";
+};
+
+// empty strings match to the graphic for the back of card
+var getCardValue = (i) => {
+  if(numVisibleCards > i) return card[i].value;
+  return "";
+};
+
+hbs.registerHelper('getCardImage', (i,width) => {
+  var str = "";
+  str += '<img width="'
+  str += width;
+  str += '" max-height="100%" src="';
+  str += "/images/cards/";
+  str += getCardValue(i);
+  str += '_of_';
+  str += getCardSuit(i);
+  str += '.svg" alt="card';
+  str += i;
+  str += '" />';
+  console.log(str);
+  return new hbs.SafeString(str);
+});
+
+// just numbers 0-51, representing the card number in the pack
 var cardArray = [];
 for(var i=0; i<52; i++) {
   cardArray[i] = i;
@@ -33,12 +63,17 @@ app.listen(port, () => {
   console.log(`Server is up on port ${port}`);
 });
 
+// state - 0=deal, 1=flop, 2=turn, 3=river
 var state = 0;
+// card object array - each has a value, and a suit
 var card = [];
+// cards visible to play in each state
 var numCards = [2,5,6,7];
+// how many cards should currently be visible?
+var numVisibleCards = 0;
 
 app.get('/', (req, res) => {
-  var cards = numCards[state];
+  numVisibleCards = numCards[state];
   if(state === 0) {
     cardArray = _.shuffle(cardArray);
     card = [];
@@ -51,60 +86,15 @@ app.get('/', (req, res) => {
     }
   }
   
-  switch(state) {
-    case 0:
-      console.log("Deal!");
-      break;
-    case 1:
-      console.log("Flop!");
-      break;
-    case 2:
-      console.log("Turn!");
-      break;
-    case 3:
-      console.log("River!");
-      break;
-  }
-  
   state++;
+  
   if(state>3) {
     state = 0;
   }
   
-  var passVals = [];
-  for(i=0; i<7; i++) {
-      passVals.push({value:"",suit:""});
-    }
+  console.log(JSON.stringify(card));
     
-  for(i=0; i<cards; i++) {
-      passVals[i].value = card[i].value;
-      passVals[i].suit = card[i].suit;
-    }
-    
-    console.log(JSON.stringify(card));
-    console.log(JSON.stringify(passVals));
-    
-  // card.push({
-    // value : cardValue[Math.floor(cardArray[1])%13],
-    // suit : cardSuit[Math.floor(cardArray[1]/13)]
-  // });
-
-  //console.log(`${card[0].value} - ${card[1].suit}`);
-
+  
   res.render('index.hbs', {
-    value1: passVals[0].value,
-    suit1: passVals[0].suit,
-    value2: passVals[1].value,
-    suit2: passVals[1].suit,
-    value3: passVals[2].value,
-    suit3: passVals[2].suit,
-    value4: passVals[3].value,
-    suit4: passVals[3].suit,
-    value5: passVals[4].value,
-    suit5: passVals[4].suit,
-    value6: passVals[5].value,
-    suit6: passVals[5].suit,
-    value7:passVals[6].value,
-    suit7: passVals[6].suit
   });
 });

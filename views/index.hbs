@@ -2,15 +2,15 @@
 
 <div class="container-fluid">
   <div class="row">
-    <img width="40%" max-height="100%" src="{{__dirname}}/images/cards/{{value1}}_of_{{suit1}}.svg" alt="card1" />
-      <img width="40%" max-height="100%" src="{{__dirname}}/images/cards/{{value2}}_of_{{suit2}}.svg" alt="card2" />
+    {{getCardImage 0 "40%"}}
+    {{getCardImage 1 "40%"}}
   </div>
+
   <div class="row">
-    <img width="16%" max-height="100%" src="{{__dirname}}/images/cards/{{value3}}_of_{{suit3}}.svg" alt="card1" />
-      <img width="16%" max-height="100%" src="{{__dirname}}/images/cards/{{value4}}_of_{{suit4}}.svg" alt="card2" />
-      <img width="16%" max-height="100%" src="{{__dirname}}/images/cards/{{value5}}_of_{{suit5}}.svg" alt="card1" />
-      <img width="16%" max-height="100%" src="{{__dirname}}/images/cards/{{value6}}_of_{{suit6}}.svg" alt="card2" />
-      <img width="16%" max-height="100%" src="{{__dirname}}/images/cards/{{value7}}_of_{{suit7}}.svg" alt="card1" />
+    {{getCardImage 2 "16%"}}
+    {{getCardImage 3 "16%"}}
+    {{getCardImage 4 "16%"}}
+    {{getCardImage 5 "16%"}}
+    {{getCardImage 6 "16%"}}
   </div>
 </div>
-{{!--<h1>{{card1}} - {{card2}}</h1>--}}
