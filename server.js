@@ -1,4 +1,5 @@
 // TODO
+// use middleware to handle multi users, not multi handlers
 // figure out __dirname thing
 // - get cards fitting right
 // - double click to toggle - front/back of cards
