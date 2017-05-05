@@ -1,4 +1,5 @@
 // TODO
+// use post, not get + url
 // use middleware to handle multi users, not multi handlers
 // figure out __dirname thing
 // - get cards fitting right
@@ -16,9 +17,13 @@ const hbs = require('hbs');
 // for shuffle
 const _ = require('lodash');
 const fs = require('fs');
+var Hand = require('pokersolver').Hand;
 
 const cardValue = ['ace','2','3','4','5','6','7','8','9','10','jack','queen','king'];
 const cardSuit = ['clubs','diamonds','hearts','spades'];
+
+const rankValue = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const rankSuit = ['c','d','h','s'];
 
 
 //create the server
@@ -45,6 +50,23 @@ var getCardValue = (i) => {
 hbs.registerHelper('getCardNumber', (i,j) => {
   //console.log(`${i} =-=-= ${j}`);
   return (i*2) + j;
+});
+
+hbs.registerHelper('getRank', (i) => {
+  var cRank = [card[i].rank,card[i+1].rank];
+  if(numVisibleCards>=23) {
+    cRank.push(card[20].rank);
+    cRank.push(card[21].rank);
+    cRank.push(card[22].rank);
+  }
+  if(numVisibleCards>=24) {
+    cRank.push(card[23].rank);
+  }
+  if(numVisibleCards>=25) {
+    cRank.push(card[24].rank);
+  }
+  var hand = Hand.solve(cRank);
+  return hand.descr;
 });
 
 hbs.registerHelper('getCardImage', (i,width) => {
@@ -104,7 +126,8 @@ function makeHandler(i) {
       for(var j=0; j<25; j++) {
         card.push({
           value : cardValue[Math.floor(cardArray[j])%13],
-          suit : cardSuit[Math.floor(cardArray[j]/13)]
+          suit : cardSuit[Math.floor(cardArray[j]/13)],
+          rank : rankValue[Math.floor(cardArray[j])%13]+rankSuit[Math.floor(cardArray[j]/13)]
         });
       }
     }
