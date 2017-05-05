@@ -53,7 +53,7 @@ hbs.registerHelper('getCardNumber', (i,j) => {
 });
 
 hbs.registerHelper('getRank', (i) => {
-  var cRank = [card[i].rank,card[i+1].rank];
+  var cRank = [card[i*2].rank,card[i*2+1].rank];
   if(numVisibleCards>=23) {
     cRank.push(card[20].rank);
     cRank.push(card[21].rank);
@@ -65,7 +65,9 @@ hbs.registerHelper('getRank', (i) => {
   if(numVisibleCards>=25) {
     cRank.push(card[24].rank);
   }
+  
   var hand = Hand.solve(cRank);
+  
   return hand.descr;
 });
 
