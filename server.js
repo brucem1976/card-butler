@@ -8,7 +8,7 @@
 // idea - display flop, turn, river
 // idea - your best hand, on ranking
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 
 // express npm: efficient async server handler
 const express = require('express');
@@ -22,7 +22,7 @@ var Hand = require('pokersolver').Hand;
 const cardValue = ['ace','2','3','4','5','6','7','8','9','10','jack','queen','king'];
 const cardSuit = ['clubs','diamonds','hearts','spades'];
 
-const rankValue = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+const rankValue = ['A','2','3','4','5','6','7','8','9','T','J','Q','K'];
 const rankSuit = ['c','d','h','s'];
 
 
