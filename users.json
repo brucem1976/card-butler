@@ -1,6 +1,11 @@
 [{
-    "name": "Player1",
+    "name": "Dealer",
     "accessCode": "999",
+    "admin": true
+},
+{
+    "name": "Player1",
+    "accessCode": "1",
     "admin": true
 },
 {
