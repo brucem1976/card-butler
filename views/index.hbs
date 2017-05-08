@@ -2,19 +2,22 @@
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
 
 <div class="container-fluid">
+  {{#if i}}
   <div class="row">
-    {{getCardImage (getCardNumber i 0) "125px"}}
-    {{getCardImage (getCardNumber i 1) "125px"}}
+    {{getCardImage i 0}}
+    {{getCardImage i 1}}
   </div>
+  {{/if}}
 
   <div class="row">
-    {{getCardImage 20 "50px"}}
-    {{getCardImage 21 "50px"}}
-    {{getCardImage 22 "50px"}}
-    {{getCardImage 23 "50px"}}
-    {{getCardImage 24 "50px"}}
+    {{getCardImage i 20}}
+    {{getCardImage i 21}}
+    {{getCardImage i 22}}
+    {{getCardImage i 23}}
+    {{getCardImage i 24}}
   </div>
 
+  {{#if i}}
   <div class="row">
     <h2 style="color:red">{{getRank i}}</h2>
     <h3>Ranking:</h3>
@@ -29,4 +32,9 @@
     <p id="2">Pair</p>
     <p id="1">High Card</p>
   </div>
+  {{/if}}
+  
+  {{#unless i}}
+  {{!--<button>Next!</button>--}}
+  {{/unless}}
 </div>
