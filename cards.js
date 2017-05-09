@@ -44,7 +44,7 @@ var advanceState = () => {
 };
 
 var getRank = (i) => {
-  var cRank = [card[i*2].rank,card[i*2+1].rank];
+  var cRank = [card[(i-1)*2].rank,card[(i-1)*2+1].rank];
   if(numVisibleCards>=23) {
     cRank.push(card[20].rank);
     cRank.push(card[21].rank);
@@ -68,21 +68,23 @@ var getCardImage = (p,i) => {
     width = "50px";
   }
   
-  if(i<20) {
-    i += (p-1)*2;
-  }
+  var cardNum = i;
+  if(cardNum<20) {
+     cardNum += (p-1)*2;
+   }
   
   var str = "";
   str += '<img width="';
   str += width;
   str += '" max-height="100%" src="';
   str += "/images/cards/";
-  str += getCardValue(i);
+  str += getCardValue(cardNum);
   str += '_of_';
-  str += getCardSuit(i);
+  str += getCardSuit(cardNum);
   str += '.svg" alt="card';
   str += i+1;
   str += '" />';
+  
   return str;
 };
 

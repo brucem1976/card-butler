@@ -8,7 +8,9 @@
     "fs": "0.0.1-security",
     "hbs": "^4.0.1",
     "lodash": "^4.17.4",
+    "mongoose": "^4.9.8",
     "pokersolver": "^2.1.2",
+    "validator": "^7.0.0",
     "yargs": "^7.1.0"
   },
   "devDependencies": {},

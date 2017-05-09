@@ -1,55 +1,55 @@
 [{
     "name": "Dealer",
     "accessCode": "999",
-    "admin": true
+    "active": true
 },
 {
     "name": "Player1",
     "accessCode": "1",
-    "admin": true
+    "active": true
 },
 {
     "name": "Player2",
     "accessCode": "2",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player3",
     "accessCode": "3",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player4",
     "accessCode": "4",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player5",
     "accessCode": "5",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player6",
     "accessCode": "6",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player7",
     "accessCode": "7",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player8",
     "accessCode": "8",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player9",
     "accessCode": "9",
-    "admin": false
+    "active": true
 },
 {
     "name": "Player10",
     "accessCode": "10",
-    "admin": false
+    "active": true
 }]

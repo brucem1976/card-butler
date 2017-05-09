@@ -13,7 +13,7 @@ const hbs = require('hbs');
 
 const cards = require('./cards');
 
-const users = require('./users');
+const user = require('./user');
 
 //create the server
 var app = express();
@@ -34,8 +34,8 @@ app.listen(port, () => {
   console.log(`Server is up on port ${port}`);
 });
 
-for(var i=0; i<users.length; i++) {
-  var route = `/${users[i].accessCode}`;
+for(var i=0; i<user.length; i++) {
+  var route = `/${user[i].accessCode}`;
   app.get(route, makeHandler(i));
 }
 
