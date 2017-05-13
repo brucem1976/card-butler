@@ -41,6 +41,8 @@ var advanceState = () => {
         });
       }
     }
+
+  return state;
 };
 
 var getRank = (i) => {
