@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+  
+<head>
+  <meta charset="utf-8">
+  <title>Action | PokerTable</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <!--<link rel="stylesheet" href="/css/styles.css">-->
+
+</head>
+
+<body>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="/js/libs/deparam.js"></script>
+<script src="/js/poker.js"></script>
+
+<div class="container-fluid">
+  <!--{{#if i}}-->
+  <div class="row" id="pocket-cards">
+    <img id="card1" width="125px" max-height="100%" src="/images/cards/_of_.svg" alt="card1" />
+    <img id="card2" width="125px" max-height="100%" src="/images/cards/_of_.svg" alt="card2" />
+    <!--{{getCardImage i 0}}-->
+    <!--{{getCardImage i 1}}-->
+  </div>
+  <!--{{/if}}-->
+
+  <div class="row">
+    <img id="card3" width="50px" max-height="100%" src="/images/cards/_of_.svg" alt="card3" />
+    <img id="card4" width="50px" max-height="100%" src="/images/cards/_of_.svg" alt="card4" />
+    <img id="card5" width="50px" max-height="100%" src="/images/cards/_of_.svg" alt="card5" />
+    <img id="card6" width="50px" max-height="100%" src="/images/cards/_of_.svg" alt="card6" />
+    <img id="card7" width="50px" max-height="100%" src="/images/cards/_of_.svg" alt="card7" />
+    
+    <!--{{getCardImage i 20}}-->
+    <!--{{getCardImage i 21}}-->
+    <!--{{getCardImage i 22}}-->
+    <!--{{getCardImage i 23}}-->
+    <!--{{getCardImage i 24}}-->
+  </div>
+
+  <!--{{#if i}}-->
+  <div class="row" id="ranks">
+    <!--<h2 style="color:red">{{getRank i}}</h2>-->
+    <h2 id="ranking" style="color:red">Unknown</h2>
+    <h3>Ranking:</h3>
+    <p id="10">Royal Flush</p>
+    <p id="9">Straight Flush</p>
+    <p id="8">Four of a Kind</p>
+    <p id="7">Full House</p>
+    <p id="6">Flush</p>
+    <p id="5">Straight</p>
+    <p id="4">Three of a Kind</p>
+    <p id="3">Two Pair</p>
+    <p id="2">Pair</p>
+    <p id="1">High Card</p>
+  </div>
+  <!--{{/if}}-->
+  
+  <!--{{#unless i}}-->
+  <div class="form-field">
+    <button id="btn-next-card">Next Card!</button>
+  </div>
+  <!--{{/unless}}-->
+</div>
+
+</body>
+</html>

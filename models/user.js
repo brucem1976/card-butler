@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const _ = require('lodash');
-const bcrypt = require('bcryptjs');
+//const mongoose = require('mongoose');
+//const jwt = require('jsonwebtoken');
+//const _ = require('lodash');
+//const bcrypt = require('bcryptjs');
 
 //const fs = require('fs');
 
 //var user = JSON.parse(fs.readFileSync("./users.json","utf8"));
 
+/*
 var UserSchema = new mongoose.Schema({
    // email: {
   //   type: String,
@@ -129,5 +130,44 @@ UserSchema.pre('save', function(next) {
 });
 
 var User = mongoose.model('User', UserSchema);
+*/
 
-module.exports = { User };
+var users = [];
+var addUser = (socketID,name) => {
+  // because users can disconnect, this list can be unordered in terms of player numbers
+  for(var i=0; i<users.length; i++) {
+    if(name === users[i].name) {
+      console.log("User already exists!");
+      return -1;
+    }
+  }
+
+  for(var i=0; i<11; i++) {
+    var matched = false;
+    for(var j=0; j<users.length; j++) {
+      if(users[j].playerNum === i) {
+        matched = true;
+        break;
+      }
+    }
+    if(!matched) {
+      users.push({playerNum: i, socketID: socketID, name:name});
+      console.log(`User ${i}, name ${name} has socket ${socketID}`);
+      return i;
+    }
+  }
+  return -1;
+};
+
+var removeUser = (socketID) => {
+  // because users can disconnect, this list can be unordered in terms of player numbers
+
+  for(var i=0; i<users.length; i++) {
+    if(users[i].socketID === socketID) {
+      users.splice(i,1);
+      return i;
+    }
+  }
+  return -1;
+};
+module.exports = { users, addUser, removeUser };

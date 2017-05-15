@@ -45,6 +45,38 @@ var advanceState = () => {
   return state;
 };
 
+var giveMyCards = (pNum) => {
+  var c = [];
+  var cRank = [];
+  if(pNum>0) {
+  c.push(card[(pNum-1)*2].value + "_of_" + card[(pNum-1)*2].suit + ".svg");
+  c.push(card[(pNum-1)*2+1].value + "_of_" + card[(pNum-1)*2+1].suit + ".svg");
+  cRank.push(card[(pNum-1)*2].rank);
+  cRank.push(card[(pNum-1)*2+1].rank);
+  } else {
+    c.push("_of_.svg");
+    c.push("_of_.svg");
+    
+  }
+  numVisibleCards = numCards[state];
+  
+  for(var i=20; i<25; i++) {
+    if(i>=numVisibleCards) {
+      c.push("_of_.svg");
+    } else {
+      c.push(card[i].value + "_of_" + card[i].suit + ".svg");
+      cRank.push(card[i].rank)
+    }
+  }
+  
+  if(pNum>0) {
+    c.push(Hand.solve(cRank).descr);
+  } else {
+    c.push("Dealer");
+  }
+  return c;
+};
+
 var getRank = (i) => {
   var cRank = [card[(i-1)*2].rank,card[(i-1)*2+1].rank];
   if(numVisibleCards>=23) {
@@ -105,6 +137,7 @@ var getCardValue = (i) => {
 module.exports = {
   advanceState,
   getRank,
-  getCardImage
+  getCardImage,
+  giveMyCards
 };
 

@@ -16,13 +16,13 @@ const express = require('express');
 // for realtime client<->server comms
 const socketIO = require('socket.io');
 // handlebars from npm: partials and helpers
-const hbs = require('hbs');
-const bodyParser = require('body-parser');
+//const hbs = require('hbs');
+//const bodyParser = require('body-parser');
 
-var {ObjectID} = require('mongodb');
-var {User} = require('../models/user');
-var {mongoose} = require('../db/mongoose.js');
-var {authenticate} = require('../middleware/authenticate');
+//var {ObjectID} = require('mongodb');
+var users = require('../models/user');
+//var {mongoose} = require('../db/mongoose.js');
+//var {authenticate} = require('../middleware/authenticate');
 
 const cards = require('../cards');
 
@@ -33,26 +33,27 @@ var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
 
-app.set('view engine', 'hbs');
+//app.set('view engine', 'hbs');
 
 // allow all html's in /public to be loaded
 app.use(express.static(publicPath));
 
-hbs.registerHelper('getRank', (i) => {
-  return cards.getRank(i);
-});
+// hbs.registerHelper('getRank', (i) => {
+//   return cards.getRank(i);
+// });
 
-hbs.registerHelper('getCardImage', (p,i) => {
-  return new hbs.SafeString(cards.getCardImage(p,i));
-});
+// hbs.registerHelper('getCardImage', (p,i) => {
+//   return new hbs.SafeString(cards.getCardImage(p,i));
+// });
 
 server.listen(port, () => {
   console.log(`Server is up on port ${port}`);
 });
 
 // json for getting body elements
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 
+/*
 // POST to create new users (Crud)
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['name','password']);
@@ -137,38 +138,62 @@ app.delete('/users/:id', (req, res) => {
     res.status(400).send();
   });
 });
+*/
 
-  var user = [999,1,2,3,4,5,6,7,8,9,10];
+  // var user = [999,1,2,3,4,5,6,7,8,9,10];
   
-  for(var i=0; i<user.length; i++) {
-    var route = `/${user[i]}`;
-    app.get(route, makeHandler(i));
-    console.log(route);
-  }
+  // for(var i=0; i<user.length; i++) {
+  //   var route = `/${user[i]}`;
+  //   app.get(route, makeHandler(i));
+  //   console.log(route);
+  // }
 
 
-function makeHandler(i) {
-  return function(req, res) {
-    //if(!i) {
-      //var s = cards.advanceState();
-      //io.emit('newCard',s);
-    //}
+// function makeHandler(i) {
+//   return function(req, res) {
+//     //if(!i) {
+//       //var s = cards.advanceState();
+//       //io.emit('newCard',s);
+//     //}
      
-    res.render('index.hbs', {
-      i
-    });
-  };
-}
+//     // res.render('index.hbs', {
+//     //   i
+//     // });
+//   };
+// }
 
 cards.advanceState();
 
 io.on('connection', (socket) => {
   console.log('New user connected');
+  console.log(socket.id);
 
-  socket.on('requestCard', (socket) => {
-    console.log('Card requested!');
+  socket.on('join', (name, callback) => {
+  var playerNo = users.addUser(socket.id,name);
+  if(playerNo < 0) {
+      callback("Couldn't create new user!");
+  }
+  callback();
+  socket.emit('connectSuccess', playerNo);
+});
+  
+  socket.on('disconnect', () => {
+    console.log("Client disconnected");
+    console.log("Removed user: ",users.removeUser(socket.id));
+  });
+  
+  socket.on('requestCards', (data) => {
+    console.log('Cards requested by player ',data.playerNum);
+    console.log(socket.id);
+    var s = cards.giveMyCards(data.playerNum);
+    socket.emit('latestCards',s);
+    //res.render('index.hbs', 0);
+  });
+  
+  socket.on('advanceState', () => {
+    console.log("Dealer requested next card/s");
     var s = cards.advanceState();
-    io.emit('newCard',s);
+    io.emit('newState',s);
     //res.render('index.hbs', 0);
   });
   
