@@ -172,14 +172,18 @@ io.on('connection', (socket) => {
   var playerNo = users.addUser(socket.id,name);
   if(playerNo < 0) {
       callback("Couldn't create new user!");
+  } else {
+    callback();
+    socket.emit('connectSuccess', playerNo);
   }
-  callback();
-  socket.emit('connectSuccess', playerNo);
 });
   
   socket.on('disconnect', () => {
     console.log("Client disconnected");
-    console.log("Removed user: ",users.removeUser(socket.id));
+    var rem = users.removeUser(socket.id);
+    if(rem >= 0) {
+      console.log("Removed user: ", rem);
+    }
   });
   
   socket.on('requestCards', (data) => {
