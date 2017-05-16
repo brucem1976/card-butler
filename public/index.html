@@ -9,6 +9,8 @@
   </head>
   
   <body class="centered-form">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsSHA/2.0.2/sha.js"></script>
+    <script src="/js/index.js"></script>
     <div class="centered-form__form">
       <form action="/poker.html">
         <div class="form-field">
@@ -17,6 +19,9 @@
         <div class="form-field">
           <label>Player name</label>
           <input type="text" name="name" autofocus/>
+          <label>Password</label>
+          <input type="password" id="pwd" name="password"/>
+          <input onclick="mySubmit(this)" type="submit">
         </div>
         <div class="form-field">
           <button>Join</button>

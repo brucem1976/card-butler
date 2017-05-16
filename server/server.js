@@ -164,12 +164,23 @@ app.delete('/users/:id', (req, res) => {
 
 cards.advanceState();
 
+// process:
+// - user presented login page: enter details
+// - submit causes client to store password, and send loginRequest with name, password, socket.id
+// - server reserves an array space for the user if possible. If user already exists, current one is sent back to login page, and new one takes over
+// - dealer is now required to authorise the new player
+// - upon success, the user is marked as active, and connection with socket
+// - every time the client requests cards, or advanced state, sends password for check
+// - buttons to mark as active/inactive
+// - button to log out entirely
+
 io.on('connection', (socket) => {
   console.log('New user connected');
   console.log(socket.id);
 
-  socket.on('join', (name, callback) => {
-  var playerNo = users.addUser(socket.id,name);
+  socket.on('join', (params, callback) => {
+  // might be connecting new user, or reconnecting existing
+  var playerNo = users.addUser(params);
   if(playerNo < 0) {
       callback("Couldn't create new user!");
   } else {
@@ -180,13 +191,14 @@ io.on('connection', (socket) => {
   
   socket.on('disconnect', () => {
     console.log("Client disconnected");
-    var rem = users.removeUser(socket.id);
-    if(rem >= 0) {
-      console.log("Removed user: ", rem);
-    }
+    // var rem = users.removeUser(socket.id);
+    // if(rem >= 0) {
+    //   console.log("Removed user: ", rem);
+    // }
   });
   
   socket.on('requestCards', (data) => {
+    // here we need to ensure the user is asking on the most recent socket: otherwise send them back to log in???
     console.log('Cards requested by player ',data.playerNum);
     console.log(socket.id);
     var s = cards.giveMyCards(data.playerNum);

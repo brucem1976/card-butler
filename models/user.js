@@ -132,35 +132,71 @@ UserSchema.pre('save', function(next) {
 var User = mongoose.model('User', UserSchema);
 */
 
-var users = [];
-var addUser = (socketID,name) => {
-  // because users can disconnect, this list can be unordered in terms of player numbers
-  for(var i=0; i<users.length; i++) {
-    if(name === users[i].name) {
-      console.log("User already exists!");
-      return -1;
-    }
-  }
+// user states:
+//  - logged on: they've entered name and password
+//  - authorized: once off by the dealer
+//  - active: the dealer has enabled them after logging in
+//  - connected: the user currently has a socket connected
 
-  for(var i=0; i<11; i++) {
-    var matched = false;
-    for(var j=0; j<users.length; j++) {
-      if(users[j].playerNum === i) {
-        matched = true;
-        break;
+// The user will be assigned a player number and password registered when 'logged on' which will persist until the dealer or they leave the game totally
+// Active means they are 'at the table' and should get cards, they can mark non-active, as can the dealer
+// Connected is simply the physical socket connection which comes and goes
+
+// all 3 are required to get cards
+
+var users = [];
+var addUser = (params) => {
+  // because users can disconnect, this list can be unordered in terms of player numbers
+  // always keep user number x as user x throughout game
+  
+  // firstly - is this a brand new user? register with password
+  // or, is it a socket refresh? If password is correct, delete older socket and allow this one.
+  
+  for(var i=0; i<users.length; i++) {
+    if(params.name === users[i].name) {
+      console.log("User already exists!");
+      if (params.password === users[i].password) {
+        console.log("Password checks out - re-enable user!");
+        return i;
+      } else {
+        console.log("Password fail - deny user!");
+        return -1;
       }
     }
-    if(!matched) {
-      users.push({playerNum: i, socketID: socketID, name:name});
-      console.log(`User ${i}, name ${name} has socket ${socketID}`);
-      return i;
-    }
   }
-  return -1;
+  
+  if(users.length>10) {
+    console.log("Game is full - login fail");
+    return -1;
+  }
+  
+  // user doesn't exist yet, so let's add them
+  users.push({playerNum: users.length, name: params.name, password: params.password});
+  
+   console.log(`User ${users.length-1}, name ${params.name} has password ${params.password}`);
+
+  return users.length-1;
+  
+  // for(var i=0; i<11; i++) {
+  //   var matched = false;
+  //   for(var j=0; j<users.length; j++) {
+  //     if(users[j].playerNum === i) {
+  //       matched = true;
+  //       break;
+  //     }
+  //   }
+  //   if(!matched) {
+  //     users.push({playerNum: i, socketID: socketID, name:name});
+  //     console.log(`User ${i}, name ${name} has socket ${socketID}`);
+  //     return i;
+  //   }
+  // }
+  // return -1;
 };
 
 var removeUser = (socketID) => {
   // because users can disconnect, this list can be unordered in terms of player numbers
+  // make sure user number x remains user number x throughout game
 
   for(var i=0; i<users.length; i++) {
     if(users[i].socketID === socketID) {

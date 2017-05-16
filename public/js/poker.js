@@ -1,11 +1,13 @@
 var pNum = -1;
+var pName = "";
 var socket = io();
 
 socket.on('connect', function () {
   console.log('Connected to server');
   var params = jQuery.deparam(window.location.search);
   console.log("User name: ",params.name);
-  socket.emit('join', params.name, function (err) {
+  pName = params.name;
+  socket.emit('join', params, function (err) {
     if(err) {
       alert(err);
       window.location.href = '/';
@@ -18,6 +20,8 @@ socket.on('connect', function () {
 socket.on('connectSuccess', function (playerNum) {
   console.log("Assigned player", playerNum);
   pNum = playerNum;
+  var titleString = pNum + ": " + pName + " | PokerTable";
+  $(document).prop('title', titleString);
     socket.emit('requestCards',{playerNum:playerNum});
     if(playerNum === 0) {
       $("#pocket-cards").attr("style","display: none;");
@@ -70,3 +74,8 @@ $(document).ready(function() {
     socket.emit('advanceState');
   });
 });
+
+// window.onbeforeunload = function () {
+//   return "Do you really want to close?";
+// };
+
