@@ -41,6 +41,11 @@ socket.on('disconnect', function() {
   console.log('Disconnected from server');
 });
 
+socket.on('leftGame', function() {
+  console.log('Left the game');
+  window.location.href = '/';
+});
+
 socket.on('newState', function(s) {
   console.log('New State Updated: ', s);
   //$("#card1").attr("src","/images/cards/ace_of_spades.svg");
@@ -70,8 +75,13 @@ socket.on('latestCards', function(cards) {
 $(document).ready(function() {
   jQuery("#btn-next-card").on("click", function (e) {
     e.preventDefault();
-    console.log('We got clickage!');
     socket.emit('advanceState');
+  });
+  
+  jQuery("#btn-leave-game").on("click", function (e) {
+    e.preventDefault();
+    console.log('We got clickage!');
+    socket.emit('leaveGame',pName);
   });
 });
 

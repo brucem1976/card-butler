@@ -144,7 +144,8 @@ var User = mongoose.model('User', UserSchema);
 
 // all 3 are required to get cards
 
-var users = [];
+var a = {playerNum:-1};
+var users = [a,a,a,a,a,a,a,a,a,a,a];
 var addUser = (params) => {
   // because users can disconnect, this list can be unordered in terms of player numbers
   // always keep user number x as user x throughout game
@@ -165,45 +166,30 @@ var addUser = (params) => {
     }
   }
   
-  if(users.length>10) {
-    console.log("Game is full - login fail");
-    return -1;
+  // user doesn't exist yet, so let's add them
+  for(i=0; i<11; i++) {
+    if(users[i].playerNum < 0) {
+      users[i] = {playerNum: i, name: params.name, password: params.password};
+      console.log(`User ${i}, name ${params.name} has password ${params.password}`);
+      return i;
+    }
   }
   
-  // user doesn't exist yet, so let's add them
-  users.push({playerNum: users.length, name: params.name, password: params.password});
-  
-   console.log(`User ${users.length-1}, name ${params.name} has password ${params.password}`);
-
-  return users.length-1;
-  
-  // for(var i=0; i<11; i++) {
-  //   var matched = false;
-  //   for(var j=0; j<users.length; j++) {
-  //     if(users[j].playerNum === i) {
-  //       matched = true;
-  //       break;
-  //     }
-  //   }
-  //   if(!matched) {
-  //     users.push({playerNum: i, socketID: socketID, name:name});
-  //     console.log(`User ${i}, name ${name} has socket ${socketID}`);
-  //     return i;
-  //   }
-  // }
-  // return -1;
+  // game is full
+  return -1;
 };
 
-var removeUser = (socketID) => {
+var removeUser = (name) => {
   // because users can disconnect, this list can be unordered in terms of player numbers
   // make sure user number x remains user number x throughout game
 
   for(var i=0; i<users.length; i++) {
-    if(users[i].socketID === socketID) {
-      users.splice(i,1);
+    if(users[i].name === name) {
+      users[i].playerNum = -1;
       return i;
     }
   }
   return -1;
 };
+
 module.exports = { users, addUser, removeUser };

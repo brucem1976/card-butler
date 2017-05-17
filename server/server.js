@@ -162,6 +162,8 @@ app.delete('/users/:id', (req, res) => {
 //   };
 // }
 
+var dealerUser = {name: 'Dealer', password: 'd961979d229805a84587b021473b3c78f03e6b175592deefff357110dfeed9a4800abd271b9a08fe31264fde594ab6cdca54821e93e7b64db7cd857990c5ce15'};
+users.addUser(dealerUser);
 cards.advanceState();
 
 // process:
@@ -210,6 +212,12 @@ io.on('connection', (socket) => {
     console.log("Dealer requested next card/s");
     var s = cards.advanceState();
     io.emit('newState',s);
+    //res.render('index.hbs', 0);
+  });
+  
+  socket.on('leaveGame', (pName) => {
+    users.removeUser(pName);
+    socket.emit('leftGame');
     //res.render('index.hbs', 0);
   });
   
