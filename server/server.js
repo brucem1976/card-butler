@@ -188,6 +188,7 @@ io.on('connection', (socket) => {
   } else {
     callback();
     socket.emit('connectSuccess', playerNo);
+    io.emit('updateUsers',users);
   }
 });
   
@@ -215,9 +216,18 @@ io.on('connection', (socket) => {
     //res.render('index.hbs', 0);
   });
   
+  socket.on('endGame', () => {
+    var names = users.removeAllUsers();
+    for(var i=0; i<names.length; i++) {
+      io.emit('leftGame',names[i]);
+    }
+    io.emit('updateUsers',users);
+  });
+  
   socket.on('leaveGame', (pName) => {
     users.removeUser(pName);
-    socket.emit('leftGame');
+    io.emit('leftGame',pName);
+    io.emit('updateUsers',users);
     //res.render('index.hbs', 0);
   });
   

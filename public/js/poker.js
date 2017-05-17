@@ -33,17 +33,42 @@ socket.on('connectSuccess', function (playerNum) {
       $("#ranks").attr("style","display: none;");
     } else {
       $("#btn-next-card").attr("style","display: none;");
+      $(".pbuttons").attr("style","display: none;");
+      
     }
   //location.reload();
+});
+
+socket.on('updateUsers', function(users) {
+  console.log("Got new user list: ", users);
+  if(pNum) {
+    return;
+  }
+  for(var i=1; i<11; i++) {
+      var btnTgt = "#btn-p" + i;
+      $(btnTgt).text("[Empty]");
+      $(btnTgt).attr("style","display: none;");
+      
+    }
+  for(var i=1; i<11; i++) {
+    if(users.users[i].playerNum > 0) {
+      var btnTgt = "#btn-p" + users.users[i].playerNum;
+      $(btnTgt).text(users.users[i].name);
+      $(btnTgt).attr("style","display: inline;");
+      console.log("Button target: ", btnTgt, " value: ", users.users[i].name);
+    }
+  }
 });
 
 socket.on('disconnect', function() {
   console.log('Disconnected from server');
 });
 
-socket.on('leftGame', function() {
+socket.on('leftGame', function(name) {
   console.log('Left the game');
-  window.location.href = '/';
+  if(pName === name) {
+    window.location.href = '/';
+  }
 });
 
 socket.on('newState', function(s) {
@@ -78,10 +103,17 @@ $(document).ready(function() {
     socket.emit('advanceState');
   });
   
-  jQuery("#btn-leave-game").on("click", function (e) {
+  jQuery("#btn-end-game").on("click", function (e) {
     e.preventDefault();
     console.log('We got clickage!');
-    socket.emit('leaveGame',pName);
+    socket.emit('endGame',pName);
+  });
+  
+  jQuery(".pbuttons").on("click", function (e) {
+    e.preventDefault();
+    console.log('We got clickage!');
+    
+    socket.emit('leaveGame',$(this).text());
   });
 });
 

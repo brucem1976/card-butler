@@ -185,11 +185,22 @@ var removeUser = (name) => {
 
   for(var i=0; i<users.length; i++) {
     if(users[i].name === name) {
-      users[i].playerNum = -1;
+      users[i] = {playerNum: -1};
       return i;
     }
   }
   return -1;
 };
 
-module.exports = { users, addUser, removeUser };
+var removeAllUsers = () => {
+  var names = [];
+  for(var i=1; i<users.length; i++) {
+    if(users[i].playerNum > 0) {
+      names.push(users[i].name);
+      users[i] = {playerNum: -1};
+    }
+  }
+  return names;
+};
+
+module.exports = { users, addUser, removeUser, removeAllUsers };
