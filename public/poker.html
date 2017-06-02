@@ -7,7 +7,44 @@
   <title>Action | PokerTable</title>
   <!--<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">-->
   <!--<link rel="stylesheet" href="/css/styles.css">-->
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Bitter" />
+  <style>
+    button.def {
+      display: inline-block;
+      margin: 0 10px 0 0;
+      padding: 4px 11px;
+      font-size: 24px;
+      font-family: "Bitter",serif;
+      line-height: 1.8;
+      appearance: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
+    
+    button.flatblue {
+      color: #fff;
+      background-color: #6496c8;
+      text-shadow: -1px 1px #417cb8;
+      border: none;
+    }
+    
+    button.flatgreen {
+      color: #fff;
+      background-color: #64c896;
+      text-shadow: -1px 1px #41b87c;
+      border: none;
+    }
+    
+    button.flatred {
+      color: #fff;
+      background-color: #c84864;
+      text-shadow: -1px 1px #b84041;
+      border: none;
+    }
 
+
+    
+  </style>
 </head>
 
 <body>
@@ -62,20 +99,19 @@
   
   <!--{{#unless i}}-->
   <div class="form-field">
-    <button id="btn-next-card">Next Card!</button>
-    <button class="pbuttons" id="btn-p1">Player1</button>
-    <button class="pbuttons" id="btn-p2">Player2</button>
-    <button class="pbuttons" id="btn-p3">Player3</button>
-    <button class="pbuttons" id="btn-p4">Player4</button>
-    <button class="pbuttons" id="btn-p5">Player5</button>
-    <button class="pbuttons" id="btn-p6">Player6</button>
-    <button class="pbuttons" id="btn-p7">Player7</button>
-    <button class="pbuttons" id="btn-p8">Player8</button>
-    <button class="pbuttons" id="btn-p9">Player9</button>
-    <button class="pbuttons" id="btn-p10">Player10</button>
-    <button class="pbuttons" id="btn-end-game">End Game</button>
-    
-    
+    <button class="def flatgreen" id="btn-next-card">Next Card!</button>
+    <button class="def pbuttons flatblue" id="btn-p1">Player1</button>
+    <button class="def pbuttons flatblue" id="btn-p2">Player2</button>
+    <button class="def pbuttons flatblue" id="btn-p3">Player3</button>
+    <button class="def pbuttons flatblue" id="btn-p4">Player4</button>
+    <button class="def pbuttons flatblue" id="btn-p5">Player5</button>
+    <br>
+    <button class="def pbuttons flatblue" id="btn-p6">Player6</button>
+    <button class="def pbuttons flatblue" id="btn-p7">Player7</button>
+    <button class="def pbuttons flatblue" id="btn-p8">Player8</button>
+    <button class="def pbuttons flatblue" id="btn-p9">Player9</button>
+    <button class="def pbuttons flatblue" id="btn-p10">Player10</button>
+    <button class="def pbuttons flatred" id="btn-end-game">End Game</button>
   </div>
   <!--{{/unless}}-->
 </div>
